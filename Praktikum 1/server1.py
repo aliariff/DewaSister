@@ -23,13 +23,13 @@ try:
 		input, output, exception = select.select(input_list, [], [])
 		
 		for socket in input:
-            # accept client and add it to list input
+	               # accept client and add it to list input
 			if socket == server_socket:
 				client_socket, client_address = server_socket.accept()
 				input_list.append(client_socket)
 				print "Accepted client: ", client_address
             
-            # handle sending and receiving message
+                       # handle sending and receiving message
 			else:
 				message = socket.recv(1024)
 				if message:
