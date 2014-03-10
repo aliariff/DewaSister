@@ -1,0 +1,11 @@
+# Todo Untuk Servernya Ali
+
+* Gunakan dua kelas pada data.py untuk proses pembungkusan data (baca protokol.txt)
+  - Kelas DataRequest ketika mengirim proses request
+  - Kelas DataResponse ketika mengirim response dari request
+* Teknis pembungkusan data bisa dengan membungkus objeknya, contoh :
+
+'''
+req = DataReqeust("SomeAction", ["SomeData1", "SomeData2"])
+socket.send(json.dumps(req))
+'''
