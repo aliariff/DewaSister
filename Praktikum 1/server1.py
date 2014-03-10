@@ -1,8 +1,6 @@
 # import required module
-import socket
-import select
-import sys
-import json
+import socket, select, sys, json, time, string
+from data import DataRequest, DataResponse
 
 # creating socket server object, bind, and listen
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -14,7 +12,9 @@ input_list = [server_socket]
 
 # open file 
 f = open('data.txt', 'r')
-lines = [line[:-1] for line in f]
+lines = []
+for line in f:
+	lines.append(string.split(line, ' - ')[1][:-1])
 f.close()
 
 try:
@@ -32,18 +32,37 @@ try:
                        # handle sending and receiving message
 			else:
 				message = socket.recv(1024)
+				print message
 				if message:
-					reply = ""
 					json_data = json.loads(message)
-					if (json_data['kode'] == 'all'):
-						reply = json.dumps(lines)
-					else:
+					result = []
+					dr = DataResponse(json_data['action'], json_data['variable'], [])
+					print json_data['variable'][0]
+					if (json_data['action'] == 'requestWeatherDateSpecific'):
+						waktu = int(time.strftime('%d', time.localtime(float(json_data['variable'][0]))))
 						try:
-							reply = json.dumps(lines[int(json_data['kode'])])
+							result.append(lines[waktu-11])
 						except:
-							reply = "Data Tidak Ditemukan"
-					socket.send(reply)
-					print "Send to client : ", client_address, reply
+							result = []
+					elif (json_data['action'] == 'requestWeatherDateRange'):
+						waktu_awal = int(time.strftime('%d', time.localtime(float(json_data['variable'][0]))))
+						waktu_akhir = int(time.strftime('%d', time.localtime(float(json_data['variable'][1]))))
+						try:
+							for x in range(waktu_awal-11, waktu_akhir-10):
+								result.append(lines[x])
+						except:
+							result = []
+					elif (json_data['action'] == 'requestWeatherAll'):
+						waktu_awal = int(time.strftime('%d', time.localtime(float(json_data['variable'][0]))))
+						waktu_akhir = int(time.strftime('%d', time.localtime(float(json_data['variable'][1]))))
+						try:
+							for x in range(waktu_awal-11, waktu_akhir-10):
+								result.append(lines[x])
+						except:
+							result = []
+					dr.result = result
+					socket.send(json.dumps(dr.__dict__))
+					print "Send to client : ", client_address
 				else:
 					socket.close()
 					input_list.remove(socket)

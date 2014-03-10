@@ -1,12 +1,13 @@
 import time
-class DataRequest(self):
-	def ___init__(self, action, variable):
+class DataRequest:
+	def __init__(self, action, variable):
 		self.action = action
 		self.variable = variable
 		self.timestamp = int(time.time())
 
-class DataResponse(self):
+class DataResponse:
 	def __init__(self, reqAction, reqVariable, result):
-		self.reqAction = action
-		self.reqVariable = variable
+		self.reqAction = reqAction
+		self.reqVariable = reqVariable
+		self.result = result
 		self.timestamp = int(time.time())
