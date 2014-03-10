@@ -9,3 +9,8 @@
 req = DataReqeust("SomeAction", ["SomeData1", "SomeData2"])
 socket.send(json.dumps(req))
 '''
+* Ohiya, proses dump obj --> json hanya bisa dilakukan jika objek ditransformasi ke dalam bentuk dict dengan fungsi berikut :
+
+'''
+socket.send(json.dumps(req.__dict__))
+'''
