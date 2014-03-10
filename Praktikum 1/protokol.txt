@@ -1,0 +1,37 @@
+# Protokol untuk Komunikasi
+
+NB: Tolong protokol disesuaikan dengan cara berikut ya, silahkan gunakan kelas DataRequest dan DataResponse (data.py) untuk pembungkusannya.
+
+## DataRequest
+
+* timestamp: Waktu pembuatan request dalam bentuk epocs (Gunakan int(time.time() untuk pembangkitannya)
+* action: enumerasi terdiri dari
+  - requestWeatherDateSpecific
+  - requestWeatherDateRange
+  - requestWeatherAll (Menggunakan variabel)
+* variable[]: Berupa array yang berisikan variabel yang diminta untuk action, tanggal menggunakan satuan epocs juga.
+
+Contoh DataRequest
+
+req = {
+	timestamp: 131412412414,
+	action: "requestWeatherDateRange"
+	variable : ["13143434234", "1314324234"]
+}
+ 
+
+## DataResponse
+
+* timestamp: Waktu pembuatan respon dari server ke klien
+* reqAction: Action yang dipilih ketika request
+* reqVariable[]: Variabel yang dipilih ketika request
+* responseData[]: Berisi array data dari response
+
+Contoh DataResponse
+
+resp = {
+	timestamp: 131412412414,
+	reqAction: "requestWeatherDateRange"
+	reqVariable : ["13143434234", "1314324234"]
+	responseData : [{date: "13143434234", weather: "Good"}]
+}
