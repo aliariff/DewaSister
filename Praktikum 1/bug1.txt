@@ -1,0 +1,13 @@
+# Ada bug
+
+Request from Websocket {"timestamp":1394510181100,"action":"requestWeatherDateSpecific","variable":[1394841600000]}
+Accepted client:  ('127.0.0.1', 54913)
+Connected to Weather Socket
+{"timestamp":1394510181100,"action":"requestWeatherDateSpecific","variable":[1394841600000]}
+
+1394841600000
+Unexpected error: <type 'exceptions.KeyError'>
+Traceback (most recent call last):
+  File "server1.py", line 54, in <module>
+      print lines[waktu]
+      KeyError: '09 Oktober 46170'
