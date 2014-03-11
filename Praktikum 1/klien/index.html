@@ -31,7 +31,7 @@
 	  $(document).ready(function() {
 		$("#tanggal").change(function() {
 			// Convert tanggal ke epocs
-			var epocs = new Date($("#tanggal").val()).getTime();
+			var epocs = parseInt(new Date($("#tanggal").val()).getTime() / 1000);
 			changeDate(epocs, function(result) {
 				alert(JSON.stringify(result));
 				$("#teks_tanggal").html(epocs);
@@ -39,7 +39,7 @@
 			});
 		});
 
-		var epocs = (new Date).getTime();
+		var epocs = parseInt((new Date).getTime() / 1000);
 		changeDate(epocs, function(result) {
 			$("#teks_tanggal").html(epocs);
 			$("#cuaca").html(result[0]);
