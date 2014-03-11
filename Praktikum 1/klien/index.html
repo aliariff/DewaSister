@@ -33,8 +33,16 @@
 			// Convert tanggal ke epocs
 			var epocs = new Date($("#tanggal").val()).getTime();
 			changeDate(epocs, function(result) {
-				$("#cuaca").html(result[0]);
+				alert(JSON.stringify(result));
+				$("#teks_tanggal").html(epocs);
+				$("#cuaca").html(result.result[0]);
 			});
+		});
+
+		var epocs = (new Date).getTime();
+		changeDate(epocs, function(result) {
+			$("#teks_tanggal").html(epocs);
+			$("#cuaca").html(result[0]);
 		});
 	  });
 
@@ -55,10 +63,10 @@ class="icon-bar"></span><span class="icon-bar"></span>
           </div>
         </div>
       </div>
-      <h2 class="page-header">Senin, 32 Februari 2014</h2>
+      <h2 class="page-header" id="teks_tanggal"></h2>
       <div class="row">
         <div class="col-md-8">
-          <h1 id="cuaca">Berawan</h1>
+          <h1 id="cuaca">Entahlah</h1>
           <p><small>By Putu Wiramaswara Widya and Ali Ariff</small></p>
         </div>
         <div class="col-md-4">

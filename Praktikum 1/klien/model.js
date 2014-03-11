@@ -11,7 +11,7 @@ module.exports.sendRequest = function(data, fn) {
 		console.log("Received data from Weather Socket");
 		console.log("Data: " + data);
 		fn(JSON.parse(data));
-		client.close()
+		client.destroy()
 		console.log("Connection closed");
 	});	
 };
