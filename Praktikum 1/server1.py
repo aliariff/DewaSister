@@ -52,14 +52,14 @@ try:
 					json_data = json.loads(message)
 					result = []
 					dr = DataResponse(json_data['action'], json_data['variable'], [])
-					print json_data['variable'][0]
+					
 					if (json_data['action'] == 'requestWeatherDateSpecific'):
 						tgl = time.strftime('%d', time.localtime(float(json_data['variable'][0])))
 						bulan = int(time.strftime('%m', time.localtime(float(json_data['variable'][0]))))
 						tahun = time.strftime('%Y', time.localtime(float(json_data['variable'][0])))
 						bulan = list_bulan[bulan-1]
 						waktu = tgl + ' ' + bulan + ' ' + tahun
-						print lines[waktu]
+						
 						try:
 							result.append({json_data['variable'][0]: lines[waktu]})
 						except:
