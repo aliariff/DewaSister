@@ -1,9 +1,9 @@
 var app = require('http').createServer(handler)
   , io = require('socket.io').listen(app)
   , fs = require('fs')
-  , model = require('model');
+  , model = require('./model.js');
 
-app.listen(80);
+app.listen(8000);
 
 function handler (req, res) {
 	fs.readFile(__dirname + '/index.html',
@@ -20,6 +20,7 @@ function handler (req, res) {
 
 io.sockets.on('connection', function (socket) {
 	socket.on('datarequest', function (data, fn) {
+		console.log("Request from Websocket " + JSON.stringify(data));
 		model.sendRequest(data, function(result) {
 			fn(result);	
 		});
