@@ -82,13 +82,43 @@ var konsumsiData = {
 
     }
 
-}
-var rpcBerobjek = {
-
 };
 
-var rpcTanpaObjek = {
 
+var rpcBerobjek = {
+    dataCuacaIndonesia: null,
+    dataCuacaInternasional: null,
+    dataCuacaJabodetabek: null,
+    dataCuacaBandara: null,
+    dataGempaTerkini: null,
+    ambilDataCuacaIndonesia: function(callback) {
+        callback(rpbBerobjek.dataCuacaIndonesia);
+    },
+    ambilDataCuacaInternasional: function(callback) {
+        callback(rpbBerobjek.dataCuacaInternasional);
+    },
+    ambilDataCuacaJabodetabek: function(callback) {
+        callback(rpbBerobjek.dataCuacaJabodetabek);
+    },
+    ambilDataCuacaBandara: function(callback) {
+        callback(rpbBerobjek.dataCuacaBandara);
+    },
+    ambilDataGempaTerkini: function(callback) {
+        callback(rpbBerobjek.dataGempaTerkini);
+    },
+    ambilSemuaDataDariSumber: function() {
+        konsumsiData.cuacaIndonesia(function(data) {
+            rpbBerobjek.dataCuacaIndonesia = data;
+        });
+    }
+};
+
+setInterval(function() {
+    rpbBerobjek.ambilSemuaDataDariSumber();
+}, 5000);
+
+var rpcTanpaObjek = {
+    // Fungsine padaha, nanging menawi dipanggil langsung nyeluk soko konsumsiData
 
 };
 
