@@ -1,0 +1,12 @@
+{
+  "name": "bmkgDataRPCParser",
+  "description": "Parser of data from Indonesia Weather and Climate Agency (BMKG)",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "express": "3.x",
+    "dnode": "1.2.x",
+    "xml2js": "0.4.x",
+    "request": "2.34.x"
+  }
+}
