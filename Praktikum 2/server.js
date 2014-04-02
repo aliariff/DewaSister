@@ -178,6 +178,9 @@ app.configure(function() {
     app.set('views', __dirname)
 });
 
+app.get('/', function(req, res) {
+    res.render('viewer.ejs', {'iframe': 'cuaca_indonesia.html'})
+});
 app.get('/cuaca_indonesia', function(req, res) {
     res.render('viewer.ejs', {'iframe': 'cuaca_indonesia.html'})
 });

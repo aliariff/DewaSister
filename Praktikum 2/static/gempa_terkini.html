@@ -35,17 +35,26 @@
              var d = dnode();
              d.on('remote', function(remote) {
                  remote.berobjek.ambilDataGempaTerkini(function(data) {
+					var i = 0;
                      $.each(data.Infogempa.gempa, function(idx, val) {
                         // Info Window
                         var infoWindow = new google.maps.InfoWindow({
                             content: "<h3>" + val.Wilayah + "</h3><br/> " + val.Tanggal + " " + val.Jam + "<br/>" + val.Magnitude + " - " + val.Kedalaman
                         });
 						var res = val.point.coordinates.split(",");
-						var marker = new google.maps.Marker({
-							map: map,
-							position: new google.maps.LatLng(res[1], res[0])
-							//icon: '/static/img/' + cuacaIcon
-						});
+						if (i < 3) {
+							var marker = new google.maps.Marker({
+								map: map,
+								position: new google.maps.LatLng(res[1], res[0]),
+								icon: '/static/img/gempa.png'
+							});
+							i++;
+						} else {
+							var marker = new google.maps.Marker({
+								map: map,
+								position: new google.maps.LatLng(res[1], res[0])
+							});
+						}
 						google.maps.event.addListener(marker, 'click', function() {
 							infoWindow.open(map, marker);
 						});
