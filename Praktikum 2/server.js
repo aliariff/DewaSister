@@ -126,10 +126,6 @@ setInterval(function() {
 }, 5000);
 
 
-konsumsiData.gempaTerkini(function(data) {
-    console.log(JSON.stringify(data));
-})
-
 // Server initialization part
 
 
@@ -139,6 +135,15 @@ var sock = shoe(function(stream) {
 });
 
 var app = express();
-app.use(express.static(__dirname));
+app.configure(function() {
+    app.use(express.static(__dirname));
+    app.set('view engine', 'ejs');
+    app.use(express.bodyParser());
+    app.set('views', __dirname)
+});
+
+app.get('/cuaca_indonesia', function(req, res) {
+    res.render('viewer.ejs', {'iframe': 'cuaca_indonesia.html'})
+})
 
 sock.install(app.listen(3000), '/dnode');
