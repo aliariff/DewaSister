@@ -8,6 +8,7 @@ var xml2js = require("xml2js");
 var express = require("express");
 var shoe = require("shoe");
 
+request = request.defaults({'proxy':'http://10.151.34.10:8080'})
 
 var ambilBerkas = function(url, callback) {
     request(url, function(error, response, body) {
@@ -33,7 +34,7 @@ var konsumsiData = {
     },
 
     cuacaInternasional: function(callback) {
-       ambilBerkas('http://data.bmkg.go.id/cuaca_dunia_1.xml', function(data) {
+       ambilBerkas('http://data.bmkg.go.id/cuaca_dunia_2.xml', function(data) {
             if(data != null) {
                 xml2js.parseString(data, {"explicitArray": false },function(err, result) {
                     callback(result);
@@ -59,7 +60,7 @@ var konsumsiData = {
     },
 
     cuacaBandara: function(callback) {
-       ambilBerkas('http://data.bmkg.go.id/aviation_id.xml', function(data) {
+       ambilBerkas('http://data.bmkg.go.id/aviation_observation.xml', function(data) {
             if(data != null) {
                 xml2js.parseString(data, {"explicitArray": false },function(err, result) {
                     callback(result);
@@ -113,18 +114,52 @@ var rpc = {
             konsumsiData.cuacaIndonesia(function(data) {
                 rpc.berobjek.dataCuacaIndonesia = data;
             });
-            // Tambahi untuk data lainnya
+			konsumsiData.cuacaInternasional(function(data) {
+                rpc.berobjek.dataCuacaInternasional = data;
+            });
+			konsumsiData.cuacaJabodetabek(function(data) {
+                rpc.berobjek.dataCuacaJabodetabek = data;
+            });
+			konsumsiData.cuacaBandara(function(data) {
+                rpc.berobjek.dataCuacaBandara = data;
+            });
+			konsumsiData.gempaTerkini(function(data) {
+                rpc.berobjek.dataGempaTerkini = data;
+            });
         }
     },
     takBerobjek : {
-        // Fungsine padaha, nanging menawi dipanggil langsung nyeluk soko konsumsiData
+        ambilDataCuacaIndonesia: function(callback) {
+			konsumsiData.cuacaIndonesia(function(data) {
+				callback(data);
+			});
+        },
+        ambilDataCuacaInternasional: function(callback) {
+            konsumsiData.cuacaInternasional(function(data) {
+				callback(data);
+			});
+        },
+        ambilDataCuacaJabodetabek: function(callback) {
+            konsumsiData.cuacaJabodetabek(function(data) {
+				callback(data);
+			});
+        },
+        ambilDataCuacaBandara: function(callback) {
+            konsumsiData.cuacaBandara(function(data) {
+				callback(data);
+			});
+        },
+        ambilDataGempaTerkini: function(callback) {
+            konsumsiData.gempaTerkini(function(data) {
+				callback(data);
+			});
+        }
     }
 };
 
 setInterval(function() {
     rpc.berobjek.ambilSemuaDataDariSumber();
 }, 5000);
-
 
 // Server initialization part
 
@@ -144,6 +179,18 @@ app.configure(function() {
 
 app.get('/cuaca_indonesia', function(req, res) {
     res.render('viewer.ejs', {'iframe': 'cuaca_indonesia.html'})
-})
+});
+app.get('/cuaca_internasional', function(req, res) {
+    res.render('viewer.ejs', {'iframe': 'cuaca_internasional.html'})
+});
+app.get('/cuaca_jabodetabek', function(req, res) {
+    res.render('viewer.ejs', {'iframe': 'cuaca_jabodetabek.html'})
+});
+app.get('/cuaca_bandara', function(req, res) {
+    res.render('viewer.ejs', {'iframe': 'cuaca_bandara.html'})
+});
+app.get('/gempa_terkini', function(req, res) {
+    res.render('viewer.ejs', {'iframe': 'gempa_terkini.html'})
+});
 
 sock.install(app.listen(3000), '/dnode');

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <style type="text/css">
+      html { height: 100% }
+      body { height: 100%; margin: 0; padding: 0 }
+      #map-canvas { height: 100% }
+    </style>
+    <script type="text/javascript"
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA9Vkm8jM7dXhtKmoAXbAPxQdV8_lQSBfQ&sensor=true">
+    </script>
+    <script src="./jquery-1.11.0.min.js"></script>
+    <script src="./bundle.js"></script>
+    <script type="text/javascript">
+      var geocoder;
+      var map;
+      function initialize() {
+        geocoder = new google.maps.Geocoder();
+        var mapOptions = {
+          center: new google.maps.LatLng(-0.789275, 113.921327),
+          zoom: 5
+        };
+        map = new google.maps.Map(document.getElementById("map-canvas"),
+            mapOptions);
+      }
+      google.maps.event.addDomListener(window, 'load', initialize);
+    </script>
+    <script>
+        $(document).ready(function() {
+             var shoe = require('shoe');
+             var dnode = require('dnode');
+
+             var stream = shoe('/dnode');
+             var d = dnode();
+             d.on('remote', function(remote) {
+                 remote.berobjek.ambilDataGempaTerkini(function(data) {
+                     $.each(data.Infogempa.gempa, function(idx, val) {
+                        // Info Window
+                        var infoWindow = new google.maps.InfoWindow({
+                            content: "<h3>" + val.Wilayah + "</h3><br/> " + val.Tanggal + " " + val.Jam + "<br/>" + val.Magnitude + " - " + val.Kedalaman
+                        });
+						var res = val.point.coordinates.split(",");
+						var marker = new google.maps.Marker({
+							map: map,
+							position: new google.maps.LatLng(res[1], res[0])
+							//icon: '/static/img/' + cuacaIcon
+						});
+						google.maps.event.addListener(marker, 'click', function() {
+							infoWindow.open(map, marker);
+						});
+                     });
+                 });
+             });
+             d.pipe(stream).pipe(d);
+             google.maps.event.addDomListener(window, "load", initialize);
+        });
+    </script>
+  </head>
+  <body>
+    <div id="map-canvas"/>
+  </body>
+</html>

@@ -34,31 +34,19 @@
              var stream = shoe('/dnode');
              var d = dnode();
              d.on('remote', function(remote) {
-                 remote.berobjek.ambilDataCuacaIndonesia(function(data) {
-                     $.each(data.Cuaca.Isi.Row, function(idx, val) {
-                         // val.Kota, val.Cuaca, val.SuhuMin, val.SuhuMax, val.KelmapanMin, val.KelembapanMax
-                         var cuacaIcon;
-                         if(val.Cuaca === "Hujan Ringan" || val.Cuaca === "Hujan Sedang") {
-                            cuacaIcon = "rainy.png";
-                        } else if (val.Cuaca === "Cerah") {
-                            cuacaIcon = "sunny.png";
-                        } else if (val.Cuaca === "Berawan") {
-                            cuacaIcon = "cloudy.png";
-                        } else if (val.Cuaca === "Cerah Berawan") {
-                            cuacaIcon = "cloudysunny.png";
-                        }
-
+                 remote.berobjek.ambilDataCuacaBandara(function(data) {
+                     $.each(data.observation.report, function(idx, val) {
                         // Info Window
                         var infoWindow = new google.maps.InfoWindow({
-                            content: "<h3>" + val.Kota + "</h3><br/> " + val.Cuaca + "<br/>" + val.SuhuMin + " - " + val.SuhuMax + "<br/>" + val.KelembapanMin + " - " + val.KelembapanMax
+                            content: "<h3>" + val.station_name + "</h3><br/>Suhu: " + val.temp
                         });
                          setTimeout(function() { 
-                            geocoder.geocode({'address': val.Kota + ", Indonesia"}, function(results, status) {
+                            geocoder.geocode({'address': val.station_name}, function(results, status) {
+								console.log(status);
                                 if(status == google.maps.GeocoderStatus.OK) {
                                     var marker = new google.maps.Marker({
                                         map: map,
-                                        position: results[0].geometry.location,
-                                        icon: '/static/img/' + cuacaIcon
+                                        position: results[0].geometry.location
                                     });
                                     google.maps.event.addListener(marker, 'click', function() {
                                         infoWindow.open(map, marker);
@@ -66,7 +54,7 @@
                                 } else if (status == google.maps.GeocoderStatus.OVER_QUERY_LIMIT) {
                                 }
                              });
-                        }, idx * 750);
+                        }, idx * 1000);
                      });
                  });
              });
