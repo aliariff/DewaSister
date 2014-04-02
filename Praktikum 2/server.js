@@ -157,6 +157,7 @@ var rpc = {
     }
 };
 
+rpc.berobjek.ambilSemuaDataDariSumber();
 setInterval(function() {
     rpc.berobjek.ambilSemuaDataDariSumber();
 }, 5000);
