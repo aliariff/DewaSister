@@ -8,7 +8,7 @@ var xml2js = require("xml2js");
 var express = require("express");
 var shoe = require("shoe");
 
-request = request.defaults({'proxy':'http://10.151.34.10:8080'})
+//request = request.defaults({'proxy':'http://10.151.34.10:8080'})
 
 var ambilBerkas = function(url, callback) {
     request(url, function(error, response, body) {
@@ -90,7 +90,7 @@ var konsumsiData = {
 
 var rpc = {
     berobjek: {
-        dataCuacaIndonesia: "Nol",
+        dataCuacaIndonesia: null,
         dataCuacaInternasional: null,
         dataCuacaJabodetabek: null,
         dataCuacaBandara: null,
@@ -179,7 +179,7 @@ app.configure(function() {
 });
 
 app.get('/', function(req, res) {
-    res.render('viewer.ejs', {'iframe': 'cuaca_indonesia.html'})
+    res.redirect('/cuaca_indonesia');
 });
 app.get('/cuaca_indonesia', function(req, res) {
     res.render('viewer.ejs', {'iframe': 'cuaca_indonesia.html'})
