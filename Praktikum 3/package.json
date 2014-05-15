@@ -1,0 +1,9 @@
+{
+  "name": "praktikumSisterModul3",
+  "description": "Digunakan untuk praktikum #3 Sistem Terdistribusi, berbasis SOAP sih biasanya",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+      "soap": "0.4.5"
+  }
+}

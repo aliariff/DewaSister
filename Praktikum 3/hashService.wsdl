@@ -1,0 +1,86 @@
+<?xml version="1.0"?>
+<wsdl:definitions name="HashService"
+   targetNamespace="http://dewasister.com/hashService.wsdl"
+   xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+   xmlns:tns="http://dewasister.com/hashService.wsdl"
+   xmlns:xsd1="http://dewasister.com/hashService.xsd"
+   xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+
+   <wsdl:types>
+      <xsd:schema targetNamespace="http://dewasister.com/hashService.xsd" xmlns:xsd="http://www.w3.org/2000/10/XMLSchema">
+        <xsd:element name="hashRequest">
+            <xsd:complexType>
+                <xsd:all>
+                    <xsd:element name="input" type="string" />
+                </xsd:all>
+            </xsd:complexType>
+        </xsd:element>
+        <xsd:element name="hashResponse">
+            <xsd:complexType>
+                <xsd:all>
+                    <xsd:element name="output" type="string" />
+                </xsd:all>
+            </xsd:complexType>
+        </xsd:element>
+      </xsd:schema>
+    </wsdl:types>
+
+   <wsdl:message name="HashRequest">
+      <wsdl:part name="body" element="xsd1:hashRequest"/>
+   </wsdl:message>
+   <wsdl:message name="HashResponse">
+      <wsdl:part name="body" element="xsd1:hashResponse"/>
+   </wsdl:message>
+
+   <wsdl:portType name="HashPortType">
+      <wsdl:operation name="Md5">
+         <wsdl:input message="tns:HashRequest"/>
+         <wsdl:output message="tns:HashResponse"/>
+      </wsdl:operation>
+      <wsdl:operation name="Sha1">
+         <wsdl:input message="tns:HashRequest"/>
+         <wsdl:output message="tns:HashResponse"/>
+      </wsdl:operation>
+      <wsdl:operation name="Sha224">
+         <wsdl:input message="tns:HashRequest"/>
+         <wsdl:output message="tns:HashResponse"/>
+      </wsdl:operation>
+   </wsdl:portType>
+
+   <wsdl:binding name="HashBinding" type="tns:HashPortType">
+       <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+       <wsdl:operation name="Md5">
+          <soap:operation soapAction="http://dewasister.com/Md5"/>
+          <wsdl:input>
+            <soap:body use="literal" />
+          </wsdl:input>
+          <wsdl:output>
+            <soap:body use="literal" />
+          </wsdl:output>
+       </wsdl:operation>
+       <wsdl:operation name="Sha1">
+          <soap:operation soapAction="http://dewasister.com/Sha1"/>
+          <wsdl:input>
+            <soap:body use="literal" />
+          </wsdl:input>
+          <wsdl:output>
+            <soap:body use="literal" />
+          </wsdl:output>
+       </wsdl:operation>
+       <wsdl:operation name="Sha224">
+          <soap:operation soapAction="http://dewasister.com/Sha224"/>
+          <wsdl:input>
+            <soap:body use="literal" />
+          </wsdl:input>
+          <wsdl:output>
+            <soap:body use="literal" />
+          </wsdl:output>
+       </wsdl:operation>
+   </wsdl:binding>
+
+   <wsdl:service name="HashService">
+      <wsdl:port binding="tns:HashBinding" name="HashPort">
+         <soap:address location="http://localhost:5000/wsdl" />
+      </wsdl:port>
+   </wsdl:service>
+</wsdl:definitions>
