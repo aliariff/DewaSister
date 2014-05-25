@@ -3,11 +3,11 @@
    targetNamespace="http://dewasister.com/hashService.wsdl"
    xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
    xmlns:tns="http://dewasister.com/hashService.wsdl"
-   xmlns:xsd1="http://dewasister.com/hashService.xsd"
+   xmlns:xsd="http://www.w3.org/2000/10/XMLSchema"
    xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
 
    <wsdl:types>
-      <xsd:schema targetNamespace="http://dewasister.com/hashService.xsd" xmlns:xsd="http://www.w3.org/2000/10/XMLSchema">
+      <xsd:schema>
         <xsd:element name="hashRequest">
             <xsd:complexType>
                 <xsd:all>
@@ -26,10 +26,10 @@
     </wsdl:types>
 
    <wsdl:message name="HashRequest">
-      <wsdl:part name="body" element="xsd1:hashRequest"/>
+      <wsdl:part name="body" element="hashRequest"/>
    </wsdl:message>
    <wsdl:message name="HashResponse">
-      <wsdl:part name="body" element="xsd1:hashResponse"/>
+      <wsdl:part name="body" element="hashResponse"/>
    </wsdl:message>
 
    <wsdl:portType name="HashPortType">
