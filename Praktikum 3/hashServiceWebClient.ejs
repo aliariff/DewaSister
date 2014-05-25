@@ -1,0 +1,79 @@
+<html ng-app="hashServiceClient">
+<head>
+<title>Hash Service</title>
+<meta name="viewport" content="width=device-width">
+<link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js" type="text/javascript"></script>
+<script src="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js" type="text/javascript"></script>
+<style type="text/css">
+  /* Space out content a bit */
+  body {
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+</style>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular.min.js"></script>
+<script>
+var app = angular.module('hashServiceClient', []);
+app.controller('hashServiceClientController', function($scope, $http) {
+    $scope.availableHashMethod = [
+        {
+            name: "md5",
+            text: "MD5"
+        },
+        {
+            name: "sha1",
+            text: "SHA1"
+        },
+        {
+            name: "sha224",
+            text: "SHA224"
+        }
+    ];
+    $scope.selectedHashMethod = $scope.availableHashMethod[0];
+    $scope.result = "";
+    $scope.generate = function() {
+        var data = {};
+        data.input = $scope.plainText; 
+        $http.post('/' + $scope.selectedHashMethod.name, data).success(function(result) {
+            $scope.result = result.output;
+        });
+    }
+});
+</script>
+</head>
+<body ng-controller="hashServiceClientController">
+<div class="container">
+  <div class="header">
+    <h3 class="text-muted">SOAP Hash Service</h3>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-12">
+        <div class="form-group">
+            <label class="control-label">Plain Text</label>
+            <div class="controls"><input type="text" class="form-control" ng-model="plainText"></div>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Hash Method</label>
+            <div class="controls"><select ng-model="selectedHashMethod" ng-options="item.text for item in availableHashMethod" class="form-control"> </select></div>
+        </div>
+
+
+        <div class="form-group">
+            <label class="control-label">Result</label>
+            <div class="controls"><input type="text" class="form-control" ng-model="result" placeholder="See the result here..." ng-disabled="true"></div>
+        </div>
+        <div class="form-group">
+            <button class="btn" ng-click="generate()">Generate</button>
+        </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <p>&copy; Ali dan Wira 2014</p>
+  </div>
+
+</div> <!-- /container -->
+</body>
+</html>
