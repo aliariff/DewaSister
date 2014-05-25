@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Cuaca SOAP</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+	<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+  <!--[if lt IE 9]>
+    <script src="js/html5shiv.js"></script>
+  <![endif]-->
+
+  <!-- Fav and touch icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="img/apple-touch-icon-144-precomposed.png">
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="img/apple-touch-icon-114-precomposed.png">
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="img/apple-touch-icon-72-precomposed.png">
+  <link rel="apple-touch-icon-precomposed" href="img/apple-touch-icon-57-precomposed.png">
+  <link rel="shortcut icon" href="img/favicon.png">
+  
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+	<script type="text/javascript" src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			
+        });
+	</script>
+</head>
+
+<body>
+<div class="container">
+	<div class="row clearfix">
+		<div class="col-md-12 column">
+			<div class="page-header">
+				<h1>
+					Cuaca Kota <%= result.Location %>
+				</h1>
+			</div>
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Key</th>
+						<th>Value</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>Location</td>
+						<td><%= result.Location %></td>
+					</tr>
+					<tr>
+						<td>Time</td>
+						<td><%= result.Time %></td>
+					</tr>
+					<tr>
+						<td>Wind</td>
+						<td><%= result.Wind %></td>
+					</tr>
+					<tr>
+						<td>Visibility</td>
+						<td><%= result.Visibility %></td>
+					</tr>
+					<tr>
+						<td>SkyConditions</td>
+						<td><%= result.SkyConditions %></td>
+					</tr>
+					<tr>
+						<td>Temperature</td>
+						<td><%= result.Temperature %></td>
+					</tr>
+					<tr>
+						<td>DewPoint</td>
+						<td><%= result.DewPoint %></td>
+					</tr>
+					<tr>
+						<td>RelativeHumidity</td>
+						<td><%= result.RelativeHumidity %></td>
+					</tr>
+					<tr>
+						<td>Pressure</td>
+						<td><%= result.Pressure %></td>
+					</tr>
+					<tr>
+						<td>Status</td>
+						<td><%= result.Status %></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+</body>
+</html>
