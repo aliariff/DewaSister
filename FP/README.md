@@ -35,7 +35,7 @@
 
 ## Protokol Worker
 
-### GET /api/getProperty
+### GET /property
 
 * Masukkan: -
 * Luaran: Properti dataset, jumlah dataset terklasifikasi dan worker yang sedang melakukan kalkulasi
@@ -45,20 +45,16 @@
         * classificatedN
         * algorithm
     * worker[]:
-        * joinTime
-        * finishTime
         * ipAddress
         * workerName
-        * requestedRow
-        * submittedRow
 
-### GET /api/centroid
+### GET /dataset
 * Masukkan: -
 * Luaran: Data centroid
 * Struktur luaran:
     * centroid[]
 
-### GET /api/getDataset
+### GET /dataset
 * Masukkan: Jumlah row yang diminta, nama worker
 * Struktur masukkan :
     * rowNumbers
@@ -68,9 +64,9 @@
 * Struktur luaran :
     * dataSet[]
         * id
-        * data
+        * result
 
-### POST /api/postDataSet
+### POST /dataset
 
 * Masukkan: Hasil dataset yang diberikan
 * Struktur masukkan :
@@ -83,9 +79,21 @@
         * rowSubmitted
         * finishTime
 
-### GET /api/getClassificatedData
 
-* Masukkan: -
-* Luaran: Data yang sudah terklasifikasi
-* Struktur luaran:
-    * classificatedData
+## Format data Mongodb
+* db.fpsister.dataset
+    * id: MongoDB ObjectID
+    * data: Array
+    * occupiedBy:
+        * workerID: MongoDB Object ID
+        * startTime: Date
+        * finishTime: Date
+    * result: Integer
+* db.fpsister.centroid
+    * id: MongoDB ObjectID
+    * idx: Integer
+    * data: Array
+* db.fpsister.worker
+    * id: MongoDB ObjectID
+    * ip: String
+    * name: String
