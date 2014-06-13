@@ -32,7 +32,7 @@ mongodb.MongoClient.connect("mongodb://localhost:27017/fpsister", function(err, 
                 worker.save({
                     ip: req.connection.remoteAddress,
                     name: req.query.workerName
-                }, function(err, workers) {
+                }, function(err, worker) {
                     // Response
                     res.writeHead(200, {'Content-Type': 'application/json'});
                     var stream = dataset.find({occupiedBy: {'$exists': false}}).limit(rowNumbers).stream();
@@ -48,7 +48,7 @@ mongodb.MongoClient.connect("mongodb://localhost:27017/fpsister", function(err, 
 
                         // Occupy me
                         item.occupiedBy = {
-                            workerID: workers[0]._id,
+                            workerID: worker._id,
                             startTime: new Date()
                         };
                         dataset.save(item, function() { } );
@@ -103,15 +103,16 @@ mongodb.MongoClient.connect("mongodb://localhost:27017/fpsister", function(err, 
             result.worker = [];
             dataset.count(function(err, count) {
                 result.dsProperty.totalRow = count;
-                dataset.find({occupiedBy: {'$exists': false}}).count(function(err, count) {
+                dataset.find({'occupiedBy.finishTime': {'$exists': false}}).count(function(err, count) {
                     result.dsProperty.totalUnclassificated = count;
-                    result.dsProperty.totalClassificated = count - result.dsProperty.totalUnclassificated;
+                    result.dsProperty.totalClassificated = result.dsProperty.totalRow - result.dsProperty.totalUnclassificated;
                     result.dsProperty.algorithm = "K-Means Clustering";
                     worker.find().each(function (err, item) {
-                        result.worker.push(item);
                         if(item == null) {
                             res.writeHead(200, {'Content-Type': 'application/json'});
                             res.end(JSON.stringify(result));
+                        } else {
+                            result.worker.push(item);
                         }
                     });
 

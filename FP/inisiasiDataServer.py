@@ -16,7 +16,7 @@ def prosesDataset():
             db.dataset.insert(dapatData)
             dapatData = []
         else:
-            dapatData.append({'data': hasil})
+            dapatData.append({'data': map(float,hasil)})
 
     db.dataset.create_index('occupiedBy')
     db.dataset.create_index('data')
@@ -33,9 +33,12 @@ def prosesCentroid():
 
     centroid,label = kmeans(numpy.array(data), 23)
     for row in centroid:
-        print row
-        db.centroid.insert({'data': map(str, row)})
+        hasil = []
+        for x in row:
+            hasil.append(x)
+
+        db.centroid.insert({'data': hasil})
 
 
-#prosesDataset()
+prosesDataset()
 prosesCentroid()
