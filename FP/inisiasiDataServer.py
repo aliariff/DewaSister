@@ -19,6 +19,8 @@ def prosesDataset():
             dapatData.append({'data': map(float,hasil)})
 
     db.dataset.create_index('occupiedBy')
+    db.dataset.create_index('occupiedBy.startTime')
+    db.dataset.create_index('occupiedBy.endTime')
     db.dataset.create_index('data')
 
 ## PROSES CENTROID

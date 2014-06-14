@@ -5,7 +5,8 @@
   "main": "workerJadi.js",
   "dependencies": {
     "mongodb": "~1.4.5",
-    "express": "4.x"
+    "express": "4.x",
+    "morgan": "*"
   },
   "devDependencies": {},
   "scripts": {

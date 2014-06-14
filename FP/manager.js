@@ -3,12 +3,14 @@
 var express = require('express');
 var http = require('http');
 var mongodb = require('mongodb');
+var morgan = require('morgan');
 
 var app = express();
 app.configure(function() {
     app.use(express.static(__dirname));
     app.set('view engine', 'ejs');
     app.use(express.bodyParser());
+    app.use(morgan());
     app.set('views', __dirname)
 });
 
@@ -117,9 +119,19 @@ mongodb.MongoClient.connect("mongodb://localhost:27017/fpsister", function(err, 
                             result.worker.push(item);
                         }
                     });
-
                 })
             })
         });
+
+        // Every minute, clear up occupiedBy data of dataset which its startTime beyond a hour
+        setInterval(function() {
+            var cue = new Date();
+            cue.setHours(cue.getHours() - 1);
+            console.log('Deleting orphaned dataset occupation data..')
+            dataset.update({'occupiedBy.startTime': {'$lt': cue}}, {'$unset': {'occupiedBy': ""}}, {multi: true},  function(err, count) {
+                console.log('Got ' + count + ' deleted');
+            });
+        }, 60000)
+
     }
 });
