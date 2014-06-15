@@ -49,13 +49,12 @@ mongodb.MongoClient.connect("mongodb://localhost:27017/fpsister", function(err, 
                           res.write(JSON.stringify(item));
                           first = false;
                         }
-
-                        // Occupy me
                         item.occupiedBy = {
                             workerID: worker._id,
-                            startTime: new Date()
+                            startTime: new Date(),
+                            finished: false
                         };
-                        dataset.save(item, function() { } );
+                        dataset.save(item, function(err) { });
                     });
                     stream.on('end', function() {
                         res.end(']');
@@ -107,17 +106,20 @@ mongodb.MongoClient.connect("mongodb://localhost:27017/fpsister", function(err, 
             result.worker = [];
             dataset.count(function(err, count) {
                 result.dsProperty.totalRow = count;
-                dataset.find({'occupiedBy.finishTime': {'$exists': false}}).count(function(err, count) {
-                    result.dsProperty.totalUnclassificated = count;
-                    result.dsProperty.totalClassificated = result.dsProperty.totalRow - result.dsProperty.totalUnclassificated;
-                    result.dsProperty.algorithm = "K-Means Clustering";
-                    worker.find().each(function (err, item) {
-                        if(item == null) {
-                            res.writeHead(200, {'Content-Type': 'application/json'});
-                            res.end(JSON.stringify(result));
-                        } else {
-                            result.worker.push(item);
-                        }
+                dataset.find({'occupiedBy.finished': true}).count(function(err, count) {
+                    result.dsProperty.totalClassificated = count;
+                    dataset.find({'occupiedBy.finished': false}).count(function(err, count) {
+                        result.dsProperty.totalOccupied = count;
+                        result.dsProperty.totalUnclassificated = result.dsProperty.totalRow - result.dsProperty.totalClassificated;
+                        result.dsProperty.algorithm = "K-Means Clustering";
+                        worker.find().each(function (err, item) {
+                            if(item == null) {
+                                res.writeHead(200, {'Content-Type': 'application/json'});
+                                res.end(JSON.stringify(result));
+                            } else {
+                                result.worker.push(item);
+                            }
+                        });
                     });
                 })
             })

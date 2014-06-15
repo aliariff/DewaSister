@@ -1,5 +1,6 @@
 from pymongo import MongoClient
 import numpy
+import sys
 from scipy.cluster.vq import kmeans
 
 
@@ -7,12 +8,16 @@ client = MongoClient()
 ## PROSES DATASET
 def prosesDataset():
     db = client.fpsister
+    counter = 0
 
     dapatData = []
-    #for line in open('./kddcup.data.corrected.delcol'):
-    for line in open('./kddcup.newtestdata_10_percent_unlabeled.delcol'):
+    for line in open('./kddcup.data.corrected.delcol'):
+    #for line in open('./kddcup.newtestdata_10_percent_unlabeled.delcol'):
+        counter = counter + 1
+        sys.stdout.write('\rCOLECT - ' + str(counter))
         hasil = line.strip().split(',')
         if len(dapatData)==100000:
+            sys.stdout.write('\rINSERT - ' + str(counter))
             db.dataset.insert(dapatData)
             dapatData = []
         else:
@@ -21,6 +26,7 @@ def prosesDataset():
     db.dataset.create_index('occupiedBy')
     db.dataset.create_index('occupiedBy.startTime')
     db.dataset.create_index('occupiedBy.endTime')
+    db.dataset.create_index('occupiedBy.finished')
     db.dataset.create_index('data')
 
 ## PROSES CENTROID
