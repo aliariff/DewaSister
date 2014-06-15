@@ -140,7 +140,7 @@ mongodb.MongoClient.connect("mongodb://localhost:27017/fpsister", function(err, 
                            {'$unset': {'occupiedBy': ""}}, {multi: true},  function(err, count) {
                 console.log('Got ' + count + ' deleted');
             });
-        }, 1000)
+        }, 60000)
 
     }
 });

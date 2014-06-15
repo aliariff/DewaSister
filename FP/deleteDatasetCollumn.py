@@ -7,7 +7,7 @@ with open('./kddcup.data.corrected') as fr:
     with open('./kddcup.data.corrected.delcol', 'w') as fw:
         writer = csv.writer(fw)
         for row in reader:
-            #del row[41] # Labeled dataset only
+            del row[41] # Labeled dataset only
             del row[1]
             del row[1]
             del row[1]
