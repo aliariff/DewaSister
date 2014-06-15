@@ -14,7 +14,7 @@ app.configure(function() {
     app.set('views', __dirname)
 });
 
-app.listen(3000);
+app.listen(3000, '0.0.0.0');
 
 
 mongodb.MongoClient.connect("mongodb://localhost:27017/fpsister", function(err, db) {
@@ -42,22 +42,26 @@ mongodb.MongoClient.connect("mongodb://localhost:27017/fpsister", function(err, 
                     var stream = dataset.find({occupiedBy: {'$exists': false}}).limit(rowNumbers).stream();
                     res.write('[')
                     var first = true;
+                    var counter = 0;
                     stream.on('data', function(item) {
-                        if(!first) {
-                          res.write(',' + JSON.stringify(item));
-                        } else {
-                          res.write(JSON.stringify(item));
-                          first = false;
-                        }
                         item.occupiedBy = {
                             workerID: worker._id,
                             startTime: new Date(),
                             finished: false
                         };
-                        dataset.save(item, function(err) { });
-                    });
-                    stream.on('end', function() {
-                        res.end(']');
+                        dataset.save(item, function(err) {
+                            delete item.occupiedBy;
+                            if(!first) {
+                              res.write(',' + JSON.stringify(item));
+                            } else {
+                              res.write(JSON.stringify(item));
+                              first = false;
+                            }
+                            counter++;
+                            if(counter == rowNumbers) {
+                                res.end(']');
+                            }
+                        });
                     });
                 });
             } else {
