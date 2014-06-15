@@ -12,7 +12,7 @@ def prosesDataset():
 
     dapatData = []
     for line in open('./kddcup.data.corrected.delcol'):
-    #for line in open('./kddcup.newtestdata_10_percent_unlabeled.delcol'):
+    #for line in open('./kddcup.data_10_percent_corrected.delcol'):
         counter = counter + 1
         sys.stdout.write('\rCOLECT - ' + str(counter))
         hasil = line.strip().split(',')
@@ -33,7 +33,7 @@ def prosesDataset():
 def prosesCentroid():
     db = client.fpsister
     data = []
-    for line in open('./kddcup.newtestdata_10_percent_unlabeled.delcol'):
+    for line in open('./kddcup.data_10_percent_corrected.delcol'):
         # Read whole data
         row = line.strip().split(',')
         row = map(float, row)
