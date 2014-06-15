@@ -30,6 +30,8 @@ mongodb.MongoClient.connect("mongodb://localhost:27017/fpsister", function(err, 
                 // Maximum 1000 per request
                 if(rowNumbers > 1000) {
                     rowNumbers = 1000;
+                } else if(rowNumbers < 5) {
+                    rowNumbers = 5;
                 }
 
                 // Insert as worker
@@ -39,7 +41,8 @@ mongodb.MongoClient.connect("mongodb://localhost:27017/fpsister", function(err, 
                 }, function(err, worker) {
                     // Response
                     res.writeHead(200, {'Content-Type': 'application/json'});
-                    var stream = dataset.find({occupiedBy: {'$exists': false}}).limit(rowNumbers).stream();
+                    // Randomisasi pengambilan
+                    var stream = dataset.find({occupiedBy: {'$exists': false}}).skip(Math.floor(Math.random()*100000)).limit(rowNumbers).stream();
                     res.write('[')
                     var first = true;
                     var counter = 0;
@@ -72,15 +75,14 @@ mongodb.MongoClient.connect("mongodb://localhost:27017/fpsister", function(err, 
         app.post('/dataset', function(req, res) {
             if(req.body.dataSet) {
                 for(idx in req.body.dataSet) {
-                    dataset.save({
-                        _id: req.body.dataSet[idx].id,
-                        result: req.body.dataSet[idx].result,
-                        occupiedBy: {
-                            endTime: new Date()
-                        }
-                    }, function() {
+                    dataset.findOne({_id: mongodb.ObjectID(req.body.dataSet[idx].id), occupiedBy: {'$exists': true}}, function(err, item) {
+                        item.result = req.body.dataSet[idx].result;
+                        item.occupiedBy.endTime = new Date();
+                        item.occupiedBy.finished = true;
+                        dataset.save(item, function(err) { } );
                     });
                 }
+                res.end('{"berhasil": "HORE!"}');
             } else {
                 res.end('{"error": "Request body not provided"}');
             }
@@ -132,12 +134,13 @@ mongodb.MongoClient.connect("mongodb://localhost:27017/fpsister", function(err, 
         // Every minute, clear up occupiedBy data of dataset which its startTime beyond a hour
         setInterval(function() {
             var cue = new Date();
-            cue.setHours(cue.getHours() - 1);
+            cue.setMinutes(cue.getMinutes() - 1);
             console.log('Deleting orphaned dataset occupation data..')
-            dataset.update({'occupiedBy.startTime': {'$lt': cue}}, {'$unset': {'occupiedBy': ""}}, {multi: true},  function(err, count) {
+            dataset.update({'occupiedBy.startTime': {'$lt': cue}, 'occupiedBy.finished': false},
+                           {'$unset': {'occupiedBy': ""}}, {multi: true},  function(err, count) {
                 console.log('Got ' + count + ' deleted');
             });
-        }, 60000)
+        }, 1000)
 
     }
 });
