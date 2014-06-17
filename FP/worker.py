@@ -1,11 +1,12 @@
 import urllib2
+import sys
 import json
 import requests
 from scipy.spatial import distance
 
-url = "http://10.151.34.157:3000"
+url = "http://" + sys.argv[1]
 jumlah = "1000"
-worker = "ali"
+worker = sys.argv[2]
 i = 1
 while True:
 	list_centroid = requests.get(url + "/centroid").json()
@@ -14,6 +15,7 @@ while True:
 	for dataset in list_dataset:
 		if "data" in dataset:
 			dist = []
+			sys.stdout.write('\rPROCESSING ' + dataset['_id'])
 			for centroid in list_centroid:
 				dist.append(distance.euclidean(dataset['data'], centroid))
 			minimal = min(float(s) for s in dist)
@@ -24,6 +26,6 @@ while True:
 
 	list_kirim_data = json.dumps(list_kirim_data)
 	headers = {'Content-type': 'application/json'}
-	print requests.post(url + "/dataset", data='{"dataSet": '+list_kirim_data+'}', headers=headers).text
-	print str(i)
+	sys.stdout.write('\nIteration #' + str(i) +' -- POSTING DATA TO SERVER...\n')
+	requests.post(url + "/dataset", data='{"dataSet": '+list_kirim_data+'}', headers=headers).text
 	i = i+1
